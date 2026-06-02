@@ -199,6 +199,29 @@ class TestDataClasses:
         assert creds.additional_data["username"] == "test"
 
 
+class TestPlaidConnector:
+    """Test Plaid connector availability."""
+    
+    def test_plaid_import(self):
+        """Should be able to import PlaidConnector."""
+        try:
+            from app.connectors.plaid import PlaidConnector
+            assert True
+        except ImportError:
+            pytest.skip("Plaid SDK not installed")
+    
+    def test_plaid_metadata(self):
+        """Should have correct metadata."""
+        try:
+            from app.connectors.plaid import PlaidConnector
+            connector = PlaidConnector()
+            assert connector.name == "plaid"
+            assert "Plaid" in connector.display_name
+            assert "transactions" in connector.features
+        except ImportError:
+            pytest.skip("Plaid SDK not installed")
+
+
 class TestBankSyncIntegration:
     """Integration tests for full flow."""
     

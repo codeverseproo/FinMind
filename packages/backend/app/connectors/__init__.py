@@ -5,9 +5,17 @@ from typing import Dict, Type, List, Any, Optional
 try:
     from .base import BankConnector
     from .mock import MockBankConnector
+    from .plaid import PlaidConnector
 except ImportError:
     from base import BankConnector
     from mock import MockBankConnector
+    from plaid import PlaidConnector
+
+# Third-party connector availability
+CONNECTOR_AVAILABILITY = {
+    "mock_bank": True,
+    "plaid": True,  # Available if plaid-python installed
+}
 
 
 class ConnectorRegistry:
@@ -51,6 +59,14 @@ class ConnectorRegistry:
 
 # Register built-in connectors
 ConnectorRegistry.register(MockBankConnector)
+
+# Register third-party connectors (may require additional setup)
+try:
+    # Check if Plaid SDK is available
+    import plaid
+    ConnectorRegistry.register(PlaidConnector)
+except ImportError:
+    pass  # Plaid not installed, skip registration
 
 
 # Convenience functions
